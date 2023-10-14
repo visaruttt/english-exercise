@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question</title>
+</head>
+<body>
+<h1>Question:</h1>
+<p>{{ .ID }} - {{ .Question }}</p>
+
+<form action="/check-answer" method="get" id="checkAnswerForm">
+    <input type="hidden" name="question_id" value="{{ .ID }}">
+    <input type="hidden" name="user_answer" id="user-answer">
+</form>
+
+<form action="/submit" method="post">
+    <input type="hidden" name="question_id" value="{{ .ID }}">
+    <h2>Options:</h2>
+    <ul>
+        {{ range $index, $option := .Options }}
+        <li>
+            <input type="radio"
+                   name="answer"
+                   value="{{ $option }}"
+                   id="option{{ $index }}"
+                   {{ if eq $option $.UserAnswer }}
+                   checked
+                   {{ end }}
+
+            >
+            <label for="option{{ $index }}">{{ $option }}</label>
+        </li>
+        {{ end }}
+    </ul>
+    <input type="button" value="Check" onclick="checkAnswer()">
+    <input type="submit" value="Submit">
+</form>
+
+{{ if .DisplayCheck }}
+<div id="resultDisplay" style="display: block">
+        {{ if .IsCorrect }}
+            <p style="color: green;">Correct! {{ .Feedback }}</p>
+        {{ else }}
+            <p style="color: red;">Incorrect. {{ .Feedback }}</p>
+        {{ end }}
+</div>
+{{ end }}
+
+
+<script>
+    function checkAnswer() {
+        const selectedOption = document.querySelector('input[name="answer"]:checked');
+        if (selectedOption) {
+            document.getElementById('user-answer').value = selectedOption.value;
+            document.getElementById('checkAnswerForm').submit();
+        } else {
+            alert('Please select an answer.');
+        }
+    }
+</script>
+</body>
+</html>

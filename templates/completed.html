@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exercise Completed</title>
+</head>
+<body>
+<h1>Congratulations! You have completed the exercise.</h1>
+<h2>Results:</h2>
+<p>Total Questions: {{ .TotalQuestions }}</p>
+<p>Total Points: {{ .TotalPoints }}</p>
+<p>Percentage: {{ .Percentage }}%</p>
+
+<h2>Your Answers and Feedback:</h2>
+{{ range $index, $result := .Results }}
+<p>
+    Your Answer: {{ $result.UserAnswer }}<br>
+    Correct Answer: {{ $result.CorrectAnswer }}<br>
+    Feedback: {{ $result.Feedback }}
+</p>
+{{ end }}
+
+</body>
+</html>
